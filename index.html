@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asad Lab | EEE Projects, Robotics, Alumni & Question Bank</title>
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfeff',
+              100: '#cffafe',
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#0891b2',
+              900: '#164e63',
+            },
+            darkbg: '#090d16',
+            darkcard: '#111827',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Subtle PCB / Engineering Blueprint Grid Background */
+    .circuit-grid-dark {
+      background-color: #090d16;
+      background-image: 
+        radial-gradient(rgba(6, 182, 212, 0.14) 1px, transparent 1px),
+        linear-gradient(to right, rgba(30, 41, 59, 0.35) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 41, 59, 0.35) 1px, transparent 1px);
+      background-size: 28px 28px, 56px 56px, 56px 56px;
+    }
+
+    .circuit-grid-light {
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(rgba(8, 145, 178, 0.16) 1px, transparent 1px),
+        linear-gradient(to right, rgba(203, 213, 225, 0.45) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(203, 213, 225, 0.45) 1px, transparent 1px);
+      background-size: 28px 28px, 56px 56px, 56px 56px;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(6, 182, 212, 0.7);
+    }
+
+    /* Hide scrollbar for horizontal category pills on mobile */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+
+<body class="font-sans antialiased transition-colors duration-300 circuit-grid-dark text-slate-800 dark:text-slate-100 selection:bg-brand-500 selection:text-white">
+
+  <!-- ==================== STICKY GLASS NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-darkbg/80 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-blue-600 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
+            <i class="fa-solid fa-microchip text-lg"></i>
+          </div>
+          <div>
+            <span class="font-bold text-lg tracking-tight block leading-none">Asad<span class="text-brand-500">.EEE</span></span>
+            <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">Hardware & Varsity Hub</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <button onclick="switchTab('all')" class="hover:text-brand-500 transition-colors">All Work</button>
+          <button onclick="switchTab('iot')" class="hover:text-brand-500 transition-colors">IoT & Embedded</button>
+          <button onclick="switchTab('robotics')" class="hover:text-brand-500 transition-colors">Robotics</button>
+          <button onclick="switchTab('varsity')" class="hover:text-brand-500 transition-colors">Varsity Projects</button>
+          <button onclick="switchTab('alumni')" class="hover:text-brand-500 transition-colors">Alumni Network</button>
+          <button onclick="switchTab('questions')" class="hover:text-brand-500 transition-colors">Question Library</button>
+        </nav>
+
+        <!-- Action Controls -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Add Entry Button -->
+          <button onclick="openAddModal()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs sm:text-sm font-semibold shadow-md shadow-brand-500/20 transition-all active:scale-95">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add Work / Resource</span>
+          </button>
+
+          <!-- Data Backup / Export Button -->
+          <button onclick="openBackupModal()" title="Backup / Export JSON for Vercel" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/70 hover:border-brand-500 text-slate-600 dark:text-slate-300 transition-colors">
+            <i class="fa-solid fa-database text-sm"></i>
+          </button>
+
+          <!-- Dark/Light Theme Toggle -->
+          <button id="themeToggle" onclick="toggleTheme()" aria-label="Toggle Theme" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/70 hover:border-brand-500 text-slate-600 dark:text-amber-400 transition-colors">
+            <i id="themeIcon" class="fa-solid fa-sun text-sm"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="relative overflow-hidden pt-10 pb-14 sm:pt-16 sm:pb-20">
+    <!-- Decorative Glow Orbs -->
+    <div class="pointer-events-none absolute -top-24 left-1/4 w-72 h-72 bg-brand-500/15 rounded-full blur-3xl"></div>
+    <div class="pointer-events-none absolute top-20 right-1/4 w-80 h-80 bg-blue-600/15 rounded-full blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="max-w-3xl">
+        <!-- Status Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/30 text-brand-600 dark:text-brand-400 text-xs font-mono mb-6">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>EEE Maker • IoT Systems • Varsity Resource Hub</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-5">
+          Engineering Hardware, <br class="hidden sm:inline" />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-cyan-500 to-blue-500">
+            Robotics & Academic Knowledge
+          </span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
+          Welcome to my digital lab! Explore my <strong>IoT prototypes</strong>, <strong>custom PCBs</strong>, <strong>university lab simulations</strong>, and <strong>robotics builds</strong>—alongside our department's <strong>Alumni Network</strong> and <strong>Previous Exam Question Library (প্রশ্ন ব্যাংক)</strong>.
+        </p>
+
+        <!-- Quick Action CTA Buttons -->
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="#hub" onclick="switchTab('iot')" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm hover:opacity-90 transition-all shadow-lg">
+            <i class="fa-solid fa-bolt text-brand-400 dark:text-brand-600"></i>
+            <span>Explore Projects</span>
+          </a>
+          <a href="#hub" onclick="switchTab('questions')" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-brand-500 font-semibold text-sm transition-all">
+            <i class="fa-solid fa-file-pdf text-rose-500"></i>
+            <span>Previous Question Bank</span>
+          </a>
+          <a href="#hub" onclick="switchTab('alumni')" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-brand-500 font-semibold text-sm transition-all">
+            <i class="fa-solid fa-user-graduate text-emerald-500"></i>
+            <span>University Alumni</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Live Stats Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-12">
+        <div class="p-4 rounded-2xl bg-white/75 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/80 dark:border-slate-800">
+          <div class="text-2xl sm:text-3xl font-extrabold text-brand-500 font-mono" id="statProjects">0</div>
+          <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">IoT & Robotics Builds</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/75 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/80 dark:border-slate-800">
+          <div class="text-2xl sm:text-3xl font-extrabold text-blue-500 font-mono" id="statVarsity">0</div>
+          <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Varsity & PCB Labs</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/75 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/80 dark:border-slate-800">
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-500 font-mono" id="statAlumni">0</div>
+          <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Verified Alumni</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/75 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/80 dark:border-slate-800">
+          <div class="text-2xl sm:text-3xl font-extrabold text-amber-500 font-mono" id="statQuestions">0</div>
+          <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Previous Questions</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MAIN INTERACTIVE HUB ==================== -->
+  <main id="hub" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    
+    <!-- Filter Tabs & Search Controls Bar -->
+    <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-3 sm:p-4 mb-8 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        
+        <!-- Category Pills -->
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 lg:pb-0" id="categoryTabs">
+          <button data-tab="all" onclick="switchTab('all')" class="tab-btn active shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all bg-brand-600 text-white shadow-sm">
+            <i class="fa-solid fa-layer-group mr-1.5"></i>All Showcase
+          </button>
+          <button data-tab="iot" onclick="switchTab('iot')" class="tab-btn shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-wifi mr-1.5 text-cyan-500"></i>IoT & Embedded
+          </button>
+          <button data-tab="robotics" onclick="switchTab('robotics')" class="tab-btn shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-robot mr-1.5 text-purple-500"></i>Robotics
+          </button>
+          <button data-tab="varsity" onclick="switchTab('varsity')" class="tab-btn shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-flask mr-1.5 text-blue-500"></i>Varsity & PCB
+          </button>
+          <button data-tab="alumni" onclick="switchTab('alumni')" class="tab-btn shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-user-graduate mr-1.5 text-emerald-500"></i>Alumni Directory
+          </button>
+          <button data-tab="questions" onclick="switchTab('questions')" class="tab-btn shrink-0 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i class="fa-solid fa-book-open mr-1.5 text-amber-500"></i>Question Library
+          </button>
+        </div>
+
+        <!-- Search & Secondary Filter -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+          <!-- Sub-filter (Visible dynamically for Questions / Alumni) -->
+          <select id="subFilter" onchange="renderContent()" class="hidden px-3 py-2 rounded-xl text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-brand-500">
+            <option value="all">All Levels / Batches</option>
+          </select>
+
+          <!-- Search Input -->
+          <div class="relative flex-1 sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input 
+              type="text" 
+              id="searchInput" 
+              oninput="renderContent()" 
+              placeholder="Search projects, courses, alumni..." 
+              class="w-full pl-9 pr-4 py-2 rounded-xl text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-brand-500 transition-colors"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Section Header Banner -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 id="sectionTitle" class="text-xl sm:text-2xl font-bold tracking-tight">All Projects & Academic Resources</h2>
+        <p id="sectionSubtitle" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">Showing latest builds, university alumni profiles, and exam archive.</p>
+      </div>
+      <span id="resultCount" class="text-xs font-mono px-3 py-1 rounded-full bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0 items</span>
+    </div>
+
+    <!-- Dynamic Grid Container -->
+    <div id="contentGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Cards injected via JavaScript -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 px-4 rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-white/40 dark:bg-slate-900/40">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 text-2xl mb-4">
+        <i class="fa-solid fa-folder-open"></i>
+      </div>
+      <h3 class="text-lg font-bold mb-1">No matching items found</h3>
+      <p class="text-sm text-slate-500 dark:text-slate-400 mb-5">Try adjusting your search query or add a new entry to this section.</p>
+      <button onclick="openAddModal()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold transition-colors">
+        <i class="fa-solid fa-plus"></i> Add New Entry
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-950/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+          <div class="flex items-center justify-center md:justify-start gap-2 font-bold text-lg">
+            <i class="fa-solid fa-microchip text-brand-500"></i>
+            <span>Asad<span class="text-brand-500">.EEE</span></span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            Built for sharing IoT prototypes, Varsity Labs, Robotics, Alumni Connections & Previous Question Papers.
+          </p>
+        </div>
+
+        <!-- Social & Engineering Profile Links -->
+        <div class="flex items-center gap-3">
+          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:border-brand-500 hover:text-brand-500 transition-colors">
+            <i class="fa-brands fa-github text-lg"></i>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:border-brand-500 hover:text-brand-500 transition-colors">
+            <i class="fa-brands fa-linkedin-in text-lg"></i>
+          </a>
+          <a href="https://easyeda.com" target="_blank" rel="noopener" title="EasyEDA / Hardware Designs" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:border-brand-500 hover:text-brand-500 transition-colors">
+            <i class="fa-solid fa-bezier-curve text-base"></i>
+          </a>
+          <a href="mailto:contact@example.com" aria-label="Email" class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:border-brand-500 hover:text-brand-500 transition-colors">
+            <i class="fa-solid fa-envelope text-base"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-slate-200/70 dark:border-slate-800/70 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
+        <span>© <span id="yearNow"></span> Asad EEE Lab. Ready for Vercel Static Deployment.</span>
+        <span class="font-mono">Single-File Architecture • LocalStorage + JSON Sync</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== DETAIL / PREVIEW MODAL ==================== -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fadeIn">
+      <!-- Modal Top Header -->
+      <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <span id="modalBadge" class="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-brand-500/15 text-brand-600 dark:text-brand-400">Category</span>
+        <div class="flex items-center gap-2">
+          <button id="modalDeleteBtn" onclick="deleteCurrentItem()" title="Delete Entry" class="p-2 rounded-xl text-rose-500 hover:bg-rose-500/10 transition-colors">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+          <button onclick="closeDetailModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div id="modalBody" class="p-6">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADD NEW ENTRY MODAL ==================== -->
+  <div id="addModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+          <i class="fa-solid fa-circle-plus text-brand-500"></i>
+          <span>Add New Work or Resource</span>
+        </h3>
+        <button onclick="closeAddModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="addEntryForm" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4">
+        <!-- Entry Type Selector -->
+        <div>
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Select Section / Category</label>
+          <select id="entryCategory" onchange="toggleFormFields()" required class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-brand-500">
+            <option value="iot">IoT & Embedded Systems Project</option>
+            <option value="robotics">Robotics & Automation Project</option>
+            <option value="varsity">Varsity Project / Simulation / PCB</option>
+            <option value="alumni">University Alumni Profile</option>
+            <option value="questions">Previous Exam Question Paper</option>
+          </select>
+        </div>
+
+        <!-- Title / Name -->
+        <div>
+          <label id="labelTitle" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Project Title</label>
+          <input type="text" id="entryTitle" required placeholder="e.g., ESP32 Smart Energy Meter" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-brand-500" />
+        </div>
+
+        <!-- Subtitle / Meta (Batch/Role OR Course Code/Level) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label id="labelMeta1" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Microcontroller / Platform</label>
+            <input type="text" id="entryMeta1" required placeholder="e.g., ESP32, STM32, MATLAB" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-brand-500" />
+          </div>
+          <div>
+            <label id="labelMeta2" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Year / Semester / Status</label>
+            <input type="text" id="entryMeta2" required placeholder="e.g., 2026 • Completed" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-brand-500" />
+          </div>
+        </div>
+
+        <!-- Tags / Skills / Course Topics -->
+        <div>
+          <label id="labelTags" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Tags (Comma Separated)</label>
+          <input type="text" id="entryTags" placeholder="e.g., MQTT, PCB, EasyEDA, C++" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-brand-500" />
+        </div>
+
+        <!-- Description / Architecture Notes / Question Preview -->
+        <div>
+          <label id="labelDesc" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Description & Technical Details</label>
+          <textarea id="entryDesc" rows="3" required placeholder="Describe circuit architecture, sensors used, simulation results, or exam topics..." class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-brand-500"></textarea>
+        </div>
+
+        <!-- External Link (GitHub / Google Drive PDF / LinkedIn) -->
+        <div>
+          <label id="labelLink" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Reference Link (GitHub / Drive PDF / LinkedIn)</label>
+          <input type="url" id="entryLink" placeholder="https://..." class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:border-brand-500" />
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeAddModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/20">Save to Hub</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== BACKUP / VERCEL SYNC MODAL ==================== -->
+  <div id="backupModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-up text-brand-500"></i>
+          <span>Data Backup & Vercel Sync</span>
+        </h3>
+        <button onclick="closeBackupModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-4 leading-relaxed">
+        Entries you add are saved automatically in your browser's <code class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-xs">localStorage</code>. Export your JSON database anytime to back it up or paste into <code class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-xs">DEFAULT_ITEMS</code> in <code class="px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-xs">index.html</code> before pushing to GitHub & Vercel!
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+        <button onclick="exportJSON()" class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold transition-colors">
+          <i class="fa-solid fa-download"></i> Export JSON Backup
+        </button>
+        <label class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 hover:border-brand-500 text-sm font-semibold cursor-pointer transition-colors">
+          <i class="fa-solid fa-upload"></i> Import JSON File
+          <input type="file" accept=".json" onchange="importJSON(event)" class="hidden" />
+        </label>
+      </div>
+
+      <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <span class="text-xs text-slate-500">Reset to initial demo dataset:</span>
+        <button onclick="resetDemoData()" class="text-xs font-semibold text-rose-500 hover:underline">Reset Default Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 translate-y-20 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-medium shadow-xl">
+    <i class="fa-solid fa-circle-check text-emerald-400 dark:text-emerald-600"></i>
+    <span id="toastMsg">Action completed!</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+  <script>
+    // =========================================================================
+    // 1. DEFAULT DATASET (Edit or replace with exported JSON before Vercel deploy)
+    // =========================================================================
+    const DEFAULT_ITEMS = [
+      // --- IoT & Embedded Systems ---
+      {
+        id: 'iot-1',
+        category: 'iot',
+        title: 'Multi-Protocol Smart Environmental & Gas Sensing Node',
+        meta1: 'ESP32-S3 • LoRa & MQTT',
+        meta2: '2026 • Hardware Prototype',
+        tags: ['ESP32', 'MQ-135', 'BME280', 'MQTT', 'Low-Power'],
+        desc: 'Designed an industrial-grade environmental telemetry node capable of monitoring VOCs, CO2 equivalents, temperature, and humidity. Supports dual-mode Wi-Fi MQTT cloud sync and long-range LoRa fallback with deep-sleep power optimization (<45µA standby).',
+        notes: 'Sensor warm-up compensation algorithm implemented in C++ with non-volatile NVS calibration storage.',
+        link: 'https://github.com'
+      },
+      {
+        id: 'iot-2',
+        category: 'iot',
+        title: 'Smart BMS & Lithium-Ion Cell Calibration Tester',
+        meta1: 'STM32F103 • INA219',
+        meta2: '2025 • Power Electronics',
+        tags: ['BMS', 'Li-Ion', 'ADC Calibration', 'UART Telemetry', 'EasyEDA'],
+        desc: 'Precision battery capacity analyzer and active balancing testbench for 3S/4S 18650 packs. Measures internal DC resistance (DCIR), state-of-charge (SoC) coulomb counting, and thermal runaway cutoffs.',
+        notes: 'Custom 2-layer PCB fabricated via JLCPCB with Kelvin 4-wire voltage sensing traces.',
+        link: 'https://github.com'
+      },
+      {
+        id: 'iot-3',
+        category: 'iot',
+        title: 'Multi-Protocol Smart Home Automation Gateway',
+        meta1: 'ESP32 • ESP-NOW & Relay',
+        meta2: '2025 • Home Automation',
+        tags: ['ESP-NOW', 'Zero-Cross Dimmer', 'Home Assistant', 'WebSocket'],
+        desc: 'Local-first smart distribution board controller featuring opto-isolated TRIAC AC dimming, current transformer (SCT-013) load monitoring, and instant physical wall-switch override even when internet is offline.',
+        notes: 'Includes surge protection MOVs and isolated 5V/3.3V Hi-Link power module.',
+        link: 'https://github.com'
+      },
+
+      // --- Robotics ---
+      {
+        id: 'rob-1',
+        category: 'robotics',
+        title: 'High-Speed PID Autonomous Line Follower Robot (LFR)',
+        meta1: 'STM32 • QTR-8RC Array',
+        meta2: '2026 • Techfest Champion',
+        tags: ['PID Control', 'TB6612FNG', 'N20 Micro Metal', 'Custom Chassis'],
+        desc: 'Competition-grade line follower robot tuned with derivative-on-measurement PID control and dynamic corner speed profiling. Handles 90-degree acute turns, grid intersections, and inverted white-on-black tracks smoothly.',
+        notes: 'Custom lightweight FR4 PCB chassis weighing 185g powered by 2S 850mAh 75C LiPo.',
+        link: 'https://github.com'
+      },
+      {
+        id: 'rob-2',
+        category: 'robotics',
+        title: '4-DOF ESP32 Wi-Fi & Inverse Kinematics Robotic Arm',
+        meta1: 'ESP32 • PCA9685 PWM',
+        meta2: '2025 • Mechatronics',
+        tags: ['Inverse Kinematics', 'MG996R', '3D Printed', 'Web Joystick'],
+        desc: 'Desktop 4-axis articulated manipulator controlled via a low-latency WebSocket web interface. Computes planar 2-link inverse kinematics in real time for pick-and-place repeatability.',
+        notes: 'Dedicated 5V 6A buck converter rail isolates servo stall current spikes from the MCU.',
+        link: 'https://github.com'
+      },
+
+      // --- Varsity Projects & Simulation ---
+      {
+        id: 'var-1',
+        category: 'varsity',
+        title: 'Single-Phase & Three-Phase Transformer MATLAB/Simulink Analysis',
+        meta1: 'MATLAB / Simulink',
+        meta2: 'Level-2 Sem-2 • EEE Lab',
+        tags: ['Electrical Machines', 'Simulink', 'Core Loss', 'Voltage Regulation'],
+        desc: 'Complete open-circuit, short-circuit, and load regulation simulation model of a 10kVA step-down distribution transformer. Visualizes B-H hysteresis saturation harmonics and efficiency curves across varying power factors.',
+        notes: 'Includes full lab report PDF and .slx simulation model files.',
+        link: 'https://github.com'
+      },
+      {
+        id: 'var-2',
+        category: 'varsity',
+        title: 'Custom ESP32-WROOM Development Board & Enclosure',
+        meta1: 'EasyEDA Pro • Fusion 360',
+        meta2: '2025 • PCB & CAD Design',
+        tags: ['PCB Layout', 'CH340C', 'Auto-Program', '3D CAD', 'JLCPCB'],
+        desc: 'Designed a breadboard-friendly USB-C ESP32 development board with auto-reset DTR/RTS transistor logic, ESD protection diodes, and a snap-fit 3D printed protective shell.',
+        notes: 'Gerber files, BOM, and Pick-and-Place CPL ready for instant SMT assembly.',
+        link: 'https://easyeda.com'
+      },
+
+      // --- University Alumni Directory ---
+      {
+        id: 'alu-1',
+        category: 'alumni',
+        title: 'Engr. Tanvir Ahmed',
+        meta1: 'Batch 14 • EEE',
+        meta2: 'Embedded Systems Engineer @ Walton Digi-Tech',
+        tags: ['Firmware', 'RTOS', 'PCB Design', 'Mentorship'],
+        desc: 'Leading IoT smart appliance firmware architecture. Happy to guide juniors on STM32/ESP32 career paths, industrial internship preparation, and thesis hardware selection.',
+        notes: 'Location: Dhaka, Bangladesh • Available for weekend CV reviews.',
+        link: 'https://linkedin.com'
+      },
+      {
+        id: 'alu-2',
+        category: 'alumni',
+        title: 'Nusrat Jahan Chowdhury',
+        meta1: 'Batch 15 • EEE',
+        meta2: 'Assistant Engineer @ Power Grid Company (PGCB)',
+        tags: ['Power Systems', 'Substation', 'Protection', 'Govt Job Prep'],
+        desc: 'Working in 230/132 kV grid substation operations and relay protection testing. Can help students with power system stability resources and EEE recruitment exam guidelines.',
+        notes: 'Location: Bogura / Dhaka • Research interest: Smart Grid & Renewable Integration.',
+        link: 'https://linkedin.com'
+      },
+      {
+        id: 'alu-3',
+        category: 'alumni',
+        title: 'Rafiul Islam',
+        meta1: 'Batch 13 • EEE',
+        meta2: 'PhD Researcher (VLSI & Photonics) @ Purdue University',
+        tags: ['VLSI', 'Semiconductors', 'Higher Study', 'GRE/IELTS'],
+        desc: 'Researching low-power neuromorphic hardware accelerators. Happy to review SOPs and guide EEE undergraduates aiming for funded MS/PhD programs in North America.',
+        notes: 'Location: Indiana, USA • Published 6 IEEE Transactions papers.',
+        link: 'https://linkedin.com'
+      },
+
+      // --- Previous Question Library ---
+      {
+        id: 'que-1',
+        category: 'questions',
+        title: 'EEE 2101: Electrical Machines-I (Semester Final Archive)',
+        meta1: 'Level-2 Sem-1',
+        meta2: '2021 – 2025 (5 Years)',
+        tags: ['DC Generator', 'DC Motor', 'Transformer', 'Previous Question'],
+        desc: 'Compiled semester final question papers covering DC machine armature reaction, speed control characteristics, transformer equivalent circuits, and auto-transformer numerical problems.',
+        notes: 'Includes marked repeated board questions & formula cheat-sheet.',
+        link: 'https://drive.google.com'
+      },
+      {
+        id: 'que-2',
+        category: 'questions',
+        title: 'EEE 2103: Electronics-I (BJT, MOSFET & Op-Amp)',
+        meta1: 'Level-2 Sem-1',
+        meta2: '2020 – 2025 (Mid + Final)',
+        tags: ['BJT Biasing', 'MOSFET', 'Op-Amp', 'Diode Circuits'],
+        desc: 'Complete archive of Class Tests, Mid-Term, and Semester Final papers for Analog Electronics-I. Covers small-signal hybrid-pi modeling, differential amplifiers, and active filters.',
+        notes: 'High-resolution scanned PDFs organized year-wise.',
+        link: 'https://drive.google.com'
+      },
+      {
+        id: 'que-3',
+        category: 'questions',
+        title: 'EEE 2205: Numerical Methods & Engineering Computation',
+        meta1: 'Level-2 Sem-2',
+        meta2: '2021 – 2025 (With Solutions)',
+        tags: ['Newton-Raphson', 'Runge-Kutta', 'Gauss Elimination', 'MATLAB'],
+        desc: 'Previous semester questions focusing on root-finding algorithms, numerical integration (Simpson’s 1/3 & 3/8 rules), ODE solvers, and MATLAB script writing questions.',
+        notes: 'Includes step-by-step solved numerical examples for quick exam revision.',
+        link: 'https://drive.google.com'
+      },
+      {
+        id: 'que-4',
+        category: 'questions',
+        title: 'EEE 1201: Alternating Current Circuits (AC Circuits)',
+        meta1: 'Level-1 Sem-2',
+        meta2: '2020 – 2025 Archive',
+        tags: ['Phasors', 'Resonance', 'Three-Phase', 'Power Factor'],
+        desc: 'Foundational AC circuit analysis question bank featuring series/parallel RLC resonance, balanced/unbalanced 3-phase star-delta networks, and coupled magnetic circuits.',
+        notes: 'Essential for Level-1 finals and competitive job exam basics.',
+        link: 'https://drive.google.com'
+      }
+    ];
+
+    // =========================================================================
+    // 2. APPLICATION STATE & STORAGE INITIALIZATION
+    // =========================================================================
+    const STORAGE_KEY = 'asad_eee_hub_v1';
+    let items = [];
+    let currentTab = 'all';
+    let activeDetailId = null;
+
+    function loadItems() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          items = JSON.parse(saved);
+        } else {
+          items = [...DEFAULT_ITEMS];
+          saveItems();
+        }
+      } catch (e) {
+        console.error('Storage error:', e);
+        items = [...DEFAULT_ITEMS];
+      }
+    }
+
+    function saveItems() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      } catch (e) {
+        console.error('Failed to save to localStorage:', e);
+      }
+      updateStats();
+    }
+
+    // =========================================================================
+    // 3. THEME MANAGEMENT (DARK / LIGHT MODE)
+    // =========================================================================
+    function initTheme() {
+      const savedTheme = localStorage.getItem('asad_theme') || 'dark';
+      applyTheme(savedTheme);
+    }
+
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      const body = document.body;
+      const icon = document.getElementById('themeIcon');
+
+      if (theme === 'dark') {
+        html.classList.add('dark');
+        body.classList.remove('circuit-grid-light');
+        body.classList.add('circuit-grid-dark');
+        icon.className = 'fa-solid fa-sun text-sm';
+      } else {
+        html.classList.remove('dark');
+        body.classList.remove('circuit-grid-dark');
+        body.classList.add('circuit-grid-light');
+        icon.className = 'fa-solid fa-moon text-sm';
+      }
+      localStorage.setItem('asad_theme', theme);
+    }
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      applyTheme(isDark ? 'light' : 'dark');
+    }
+
+    // =========================================================================
+    // 4. TABS, SUB-FILTERS & RENDER ENGINE
+    // =========================================================================
+    const TAB_META = {
+      all: {
+        title: 'All Projects & Academic Resources',
+        subtitle: 'Explore IoT systems, robotics, varsity simulations, alumni network & exam question bank.'
+      },
+      iot: {
+        title: 'IoT & Embedded Systems',
+        subtitle: 'Microcontroller nodes, sensor telemetry, custom BMS & smart automation builds.'
+      },
+      robotics: {
+        title: 'Robotics & Mechatronics',
+        subtitle: 'Autonomous line followers, PID controllers, inverse kinematics & competition bots.'
+      },
+      varsity: {
+        title: 'Varsity Projects, Simulations & PCBs',
+        subtitle: 'MATLAB/Simulink models, EasyEDA custom circuit boards, and 3D CAD enclosures.'
+      },
+      alumni: {
+        title: 'University Alumni Directory',
+        subtitle: 'Connect with EEE seniors across industry, power sector, and global research labs.'
+      },
+      questions: {
+        title: 'Previous Exam Question Library (প্রশ্ন ব্যাংক)',
+        subtitle: 'Semester-wise previous question papers, mid-term archives & revision notes.'
+      }
+    };
+
+    function switchTab(tab) {
+      currentTab = tab;
+
+      // Update active button styles
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.dataset.tab === tab) {
+          btn.classList.add('bg-brand-600', 'text-white', 'shadow-sm');
+          btn.classList.remove('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        } else {
+          btn.classList.remove('bg-brand-600', 'text-white', 'shadow-sm');
+          btn.classList.add('text-slate-600', 'dark:text-slate-300', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+        }
+      });
+
+      // Update Section Header
+      document.getElementById('sectionTitle').textContent = TAB_META[tab].title;
+      document.getElementById('sectionSubtitle').textContent = TAB_META[tab].subtitle;
+
+      // Populate dynamic subFilter for Question Library or Alumni
+      const subFilter = document.getElementById('subFilter');
+      if (tab === 'questions') {
+        subFilter.classList.remove('hidden');
+        subFilter.innerHTML = `
+          <option value="all">All Levels / Semesters</option>
+          <option value="Level-1">Level-1 Courses</option>
+          <option value="Level-2">Level-2 Courses</option>
+          <option value="Level-3">Level-3 Courses</option>
+          <option value="Level-4">Level-4 Courses</option>
+        `;
+      } else if (tab === 'alumni') {
+        subFilter.classList.remove('hidden');
+        const batches = [...new Set(items.filter(i => i.category === 'alumni').map(i => i.meta1))];
+        subFilter.innerHTML = `<option value="all">All Batches</option>` +
+          batches.map(b => `<option value="${b}">${b}</option>`).join('');
+      } else {
+        subFilter.classList.add('hidden');
+        subFilter.value = 'all';
+      }
+
+      renderContent();
+    }
+
+    function getCategoryBadge(cat) {
+      switch (cat) {
+        case 'iot':
+          return { label: 'IoT & Embedded', icon: 'fa-wifi', classes: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20' };
+        case 'robotics':
+          return { label: 'Robotics', icon: 'fa-robot', classes: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20' };
+        case 'varsity':
+          return { label: 'Varsity & PCB', icon: 'fa-flask', classes: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20' };
+        case 'alumni':
+          return { label: 'Alumni', icon: 'fa-user-graduate', classes: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' };
+        case 'questions':
+          return { label: 'Question Bank', icon: 'fa-file-lines', classes: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20' };
+        default:
+          return { label: 'Resource', icon: 'fa-microchip', classes: 'bg-slate-500/10 text-slate-500 border-slate-500/20' };
+      }
+    }
+
+    function renderContent() {
+      const grid = document.getElementById('contentGrid');
+      const emptyState = document.getElementById('emptyState');
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const subVal = document.getElementById('subFilter').value;
+
+      const filtered = items.filter(item => {
+        const matchesTab = currentTab === 'all' || item.category === currentTab;
+        const matchesSub = subVal === 'all' || (item.meta1 && item.meta1.toLowerCase().includes(subVal.toLowerCase()));
+        const searchableText = [
+          item.title,
+          item.meta1,
+          item.meta2,
+          item.desc,
+          ...(item.tags || [])
+        ].join(' ').toLowerCase();
+
+        const matchesQuery = !query || searchableText.includes(query);
+        return matchesTab && matchesSub && matchesQuery;
+      });
+
+      document.getElementById('resultCount').textContent = `${filtered.length} ${filtered.length === 1 ? 'item' : 'items'}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(item => createCardHTML(item)).join('');
+    }
+
+    function createCardHTML(item) {
+      const badge = getCategoryBadge(item.category);
+      const tagsHTML = (item.tags || []).slice(0, 4).map(tag =>
+        `<span class="px-2.5 py-0.5 rounded-lg text-[11px] font-mono bg-slate-100 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/70">#${escapeHTML(tag)}</span>`
+      ).join('');
+
+      // Specialized Alumni Card Visuals
+      if (item.category === 'alumni') {
+        const initials = item.title.replace(/^Engr\.\s*/i, '').split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
+        return `
+          <article onclick="openDetailModal('${item.id}')" class="group cursor-pointer flex flex-col justify-between p-6 rounded-3xl bg-white/85 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 hover:border-emerald-500/60 dark:hover:border-emerald-500/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-bold flex items-center justify-center text-base shadow-md">
+                    ${escapeHTML(initials)}
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-base sm:text-lg group-hover:text-emerald-500 transition-colors">${escapeHTML(item.title)}</h3>
+                    <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium">${escapeHTML(item.meta1)}</span>
+                  </div>
+                </div>
+                <span class="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium border ${badge.classes}">
+                  <i class="fa-solid ${badge.icon}"></i> Alumni
+                </span>
+              </div>
+
+              <div class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2.5 flex items-center gap-2">
+                <i class="fa-solid fa-briefcase text-slate-400"></i>
+                <span>${escapeHTML(item.meta2)}</span>
+              </div>
+
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
+                ${escapeHTML(item.desc)}
+              </p>
+            </div>
+
+            <div>
+              <div class="flex flex-wrap gap-1.5 mb-4">${tagsHTML}</div>
+              <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                <span>View Mentorship & Profile</span>
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      // Specialized Question Bank Card Visuals
+      if (item.category === 'questions') {
+        return `
+          <article onclick="openDetailModal('${item.id}')" class="group cursor-pointer flex flex-col justify-between p-6 rounded-3xl bg-white/85 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 hover:border-amber-500/60 dark:hover:border-amber-500/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-4">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${badge.classes}">
+                  <i class="fa-solid ${badge.icon}"></i> ${badge.label}
+                </span>
+                <span class="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  ${escapeHTML(item.meta1)}
+                </span>
+              </div>
+
+              <h3 class="font-bold text-base sm:text-lg leading-snug mb-2 group-hover:text-amber-500 transition-colors">
+                ${escapeHTML(item.title)}
+              </h3>
+
+              <div class="text-xs font-mono text-slate-500 dark:text-slate-400 mb-3">
+                <i class="fa-regular fa-calendar mr-1"></i> ${escapeHTML(item.meta2)}
+              </div>
+
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
+                ${escapeHTML(item.desc)}
+              </p>
+            </div>
+
+            <div>
+              <div class="flex flex-wrap gap-1.5 mb-4">${tagsHTML}</div>
+              <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-amber-600 dark:text-amber-400">
+                <span><i class="fa-solid fa-file-pdf mr-1"></i> Preview & Download PDF</span>
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      // Standard Engineering Project Card (IoT, Robotics, Varsity)
+      return `
+        <article onclick="openDetailModal('${item.id}')" class="group cursor-pointer flex flex-col justify-between p-6 rounded-3xl bg-white/85 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/90 dark:border-slate-800 hover:border-brand-500/60 dark:hover:border-brand-500/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${badge.classes}">
+                <i class="fa-solid ${badge.icon}"></i> ${badge.label}
+              </span>
+              <span class="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                ${escapeHTML(item.meta2)}
+              </span>
+            </div>
+
+            <h3 class="font-bold text-base sm:text-lg leading-snug mb-2 group-hover:text-brand-500 transition-colors">
+              ${escapeHTML(item.title)}
+            </h3>
+
+            <div class="inline-flex items-center gap-1.5 text-xs font-mono text-brand-600 dark:text-brand-400 mb-3">
+              <i class="fa-solid fa-microchip"></i>
+              <span>${escapeHTML(item.meta1)}</span>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed mb-4">
+              ${escapeHTML(item.desc)}
+            </p>
+          </div>
+
+          <div>
+            <div class="flex flex-wrap gap-1.5 mb-4">${tagsHTML}</div>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+              <span>Inspect Architecture & Code</span>
+              <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function updateStats() {
+      document.getElementById('statProjects').textContent = items.filter(i => i.category === 'iot' || i.category === 'robotics').length;
+      document.getElementById('statVarsity').textContent = items.filter(i => i.category === 'varsity').length;
+      document.getElementById('statAlumni').textContent = items.filter(i => i.category === 'alumni').length;
+      document.getElementById('statQuestions').textContent = items.filter(i => i.category === 'questions').length;
+    }
+
+    // =========================================================================
+    // 5. DETAIL PREVIEW MODAL
+    // =========================================================================
+    function openDetailModal(id) {
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+
+      activeDetailId = id;
+      const badge = getCategoryBadge(item.category);
+      document.getElementById('modalBadge').innerHTML = `<i class="fa-solid ${badge.icon} mr-1.5"></i>${badge.label}`;
+
+      const actionLabel = item.category === 'questions'
+        ? 'Open / Download Question PDF'
+        : item.category === 'alumni'
+          ? 'Connect on LinkedIn / Profile'
+          : 'View Source Code / Schematics';
+
+      const actionIcon = item.category === 'questions'
+        ? 'fa-file-arrow-down'
+        : item.category === 'alumni'
+          ? 'fa-brands fa-linkedin'
+          : 'fa-arrow-up-right-from-square';
+
+      const tagsHTML = (item.tags || []).map(tag =>
+        `<span class="px-3 py-1 rounded-xl text-xs font-mono bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">#${escapeHTML(tag)}</span>`
+      ).join('');
+
+      document.getElementById('modalBody').innerHTML = `
+        <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight mb-2">${escapeHTML(item.title)}</h2>
+        
+        <div class="flex flex-wrap items-center gap-3 text-xs font-mono text-slate-500 dark:text-slate-400 mb-5">
+          <span class="px-2.5 py-1 rounded-lg bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold">${escapeHTML(item.meta1)}</span>
+          <span>•</span>
+          <span>${escapeHTML(item.meta2)}</span>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Overview & Details</h4>
+            <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">${escapeHTML(item.desc)}</p>
+          </div>
+
+          ${item.notes ? `
+            <div class="p-4 rounded-2xl bg-slate-100/80 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-1">
+                <i class="fa-solid fa-terminal mr-1"></i> Engineering / Study Notes
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">${escapeHTML(item.notes)}</p>
+            </div>
+          ` : ''}
+
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Tags & Keywords</h4>
+            <div class="flex flex-wrap gap-2">${tagsHTML}</div>
+          </div>
+
+          <div class="pt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 dark:border-slate-800">
+            ${item.link ? `
+              <a href="${escapeHTML(item.link)}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/20 transition-all">
+                <i class="fa-solid ${actionIcon}"></i>
+                <span>${actionLabel}</span>
+              </a>
+            ` : `<span class="text-xs text-slate-400">No external link attached</span>`}
+
+            <button onclick="closeDetailModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">
+              Close
+            </button>
+          </div>
+        </div>
+      `;
+
+      const modal = document.getElementById('detailModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeDetailModal() {
+      const modal = document.getElementById('detailModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      activeDetailId = null;
+    }
+
+    function deleteCurrentItem() {
+      if (!activeDetailId) return;
+      items = items.filter(i => i.id !== activeDetailId);
+      saveItems();
+      closeDetailModal();
+      renderContent();
+      showToast('Entry removed from hub');
+    }
+
+    // =========================================================================
+    // 6. ADD NEW ENTRY MODAL & FORM HANDLER
+    // =========================================================================
+    function openAddModal() {
+      if (currentTab !== 'all') {
+        document.getElementById('entryCategory').value = currentTab;
+      }
+      toggleFormFields();
+      const modal = document.getElementById('addModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeAddModal() {
+      const modal = document.getElementById('addModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.getElementById('addEntryForm').reset();
+    }
+
+    function toggleFormFields() {
+      const cat = document.getElementById('entryCategory').value;
+      const labelTitle = document.getElementById('labelTitle');
+      const entryTitle = document.getElementById('entryTitle');
+      const labelMeta1 = document.getElementById('labelMeta1');
+      const entryMeta1 = document.getElementById('entryMeta1');
+      const labelMeta2 = document.getElementById('labelMeta2');
+      const entryMeta2 = document.getElementById('entryMeta2');
+      const labelLink = document.getElementById('labelLink');
+
+      if (cat === 'alumni') {
+        labelTitle.textContent = 'Alumni Full Name';
+        entryTitle.placeholder = 'e.g., Engr. Mahmudul Hasan';
+        labelMeta1.textContent = 'Batch & Department';
+        entryMeta1.placeholder = 'e.g., Batch 16 • EEE';
+        labelMeta2.textContent = 'Current Role & Organization';
+        entryMeta2.placeholder = 'e.g., Design Engineer @ Neural Semiconductor';
+        labelLink.textContent = 'LinkedIn or Portfolio URL';
+      } else if (cat === 'questions') {
+        labelTitle.textContent = 'Course Code & Subject Name';
+        entryTitle.placeholder = 'e.g., EEE 3103: Power Electronics';
+        labelMeta1.textContent = 'Level & Semester';
+        entryMeta1.placeholder = 'e.g., Level-3 Sem-1';
+        labelMeta2.textContent = 'Exam Year / Type';
+        entryMeta2.placeholder = 'e.g., 2021–2025 Final & Mid';
+        labelLink.textContent = 'Google Drive / PDF Question Link';
+      } else {
+        labelTitle.textContent = 'Project Title';
+        entryTitle.placeholder = 'e.g., ESP32 Smart Energy & Power Factor Meter';
+        labelMeta1.textContent = 'Hardware / Software Stack';
+        entryMeta1.placeholder = 'e.g., ESP32, PZEM-004T, EasyEDA';
+        labelMeta2.textContent = 'Year / Project Type';
+        entryMeta2.placeholder = 'e.g., 2026 • Hardware Prototype';
+        labelLink.textContent = 'GitHub / Demo / EasyEDA URL';
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const category = document.getElementById('entryCategory').value;
+      const title = document.getElementById('entryTitle').value.trim();
+      const meta1 = document.getElementById('entryMeta1').value.trim();
+      const meta2 = document.getElementById('entryMeta2').value.trim();
+      const rawTags = document.getElementById('entryTags').value;
+      const desc = document.getElementById('entryDesc').value.trim();
+      const link = document.getElementById('entryLink').value.trim();
+
+      const tags = rawTags
+        .split(',')
+        .map(t => t.trim())
+        .filter(Boolean);
+
+      const newItem = {
+        id: `${category}-${Date.now()}`,
+        category,
+        title,
+        meta1,
+        meta2,
+        tags: tags.length ? tags : [category.toUpperCase()],
+        desc,
+        notes: 'Added via Interactive Hub Dashboard.',
+        link
+      };
+
+      items.unshift(newItem);
+      saveItems();
+      closeAddModal();
+      switchTab(category);
+      showToast('Successfully published to your hub!');
+    }
+
+    // =========================================================================
+    // 7. JSON EXPORT / IMPORT FOR VERCEL STATIC DEPLOYMENT
+    // =========================================================================
+    function openBackupModal() {
+      const modal = document.getElementById('backupModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeBackupModal() {
+      const modal = document.getElementById('backupModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function exportJSON() {
+      const dataStr = JSON.stringify(items, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `asad-eee-hub-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('JSON database downloaded!');
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            items = imported;
+            saveItems();
+            renderContent();
+            closeBackupModal();
+            showToast('Database imported successfully!');
+          } else {
+            showToast('Invalid JSON format.');
+          }
+        } catch (err) {
+          showToast('Error parsing JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetDemoData() {
+      items = [...DEFAULT_ITEMS];
+      saveItems();
+      renderContent();
+      closeBackupModal();
+      showToast('Reset to default EEE portfolio dataset.');
+    }
+
+    // =========================================================================
+    // 8. UTILITIES & INITIALIZATION
+    // =========================================================================
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // Close modals on Escape key or backdrop click
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDetailModal();
+        closeAddModal();
+        closeBackupModal();
+      }
+    });
+
+    ['detailModal', 'addModal', 'backupModal'].forEach(id => {
+      document.getElementById(id).addEventListener('click', (e) => {
+        if (e.target.id === id) {
+          if (id === 'detailModal') closeDetailModal();
+          if (id === 'addModal') closeAddModal();
+          if (id === 'backupModal') closeBackupModal();
+        }
+      });
+    });
+
+    // Boot Application
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('yearNow').textContent = new Date().getFullYear();
+      initTheme();
+      loadItems();
+      updateStats();
+      renderContent();
+    });
+  </script>
+</body>
+</html>
